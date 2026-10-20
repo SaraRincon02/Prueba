@@ -1,6 +1,7 @@
 package co.edu.uptc.vista;
 
 import co.edu.uptc.controlador.Pedido;
+import co.edu.uptc.controlador.ProductoNoEncontradoException;
 import co.edu.uptc.controlador.Tienda;
 import co.edu.uptc.modelo.LineaPedido;
 import co.edu.uptc.modelo.Producto;
@@ -21,8 +22,8 @@ public class Menu {
     public void iniciar(){
         System.out.println();
         System.out.println("===== " + tienda.getName() + " =====");
-        int opcion = 0;
-        while (opcion == 0){
+        int opcion = -1;
+        while (opcion != 0){
             mostrarMenu();
             opcion = sc.nextInt();
 
@@ -33,30 +34,27 @@ public class Menu {
                     System.out.println(p);
                 }
             } else if (opcion == 2) {
-
                 crearPedido();
             }else{
-                System.out.println("Opcion no valida");
+                System.out.println("[!] Opción no valida");
             }
         }
     }
 
     private void mostrarMenu(){
         System.out.println();
-        System.out.println("1. Ver catalogo");
+        System.out.println("1. Ver carta");
         System.out.println("2. Agregar Pedido");
         System.out.println("3. Ver Pedido");
     }
 
     private void crearPedido(){
-        String codigo = sc.nextLine();
-        sc.nextLine();
-        String c = sc.nextLine();
+        String codigo =preguntar("Escriba el código del producto");
+        String c = preguntar("Escriba la cantidad deseada");
 
         try {
 
             int cantidad = Integer.parseInt(c);
-
             Producto p = tienda.buscarProducto(codigo);
             double subTotal = p.getPrice() * cantidad;
             pedido.agregar(new LineaPedido(p, cantidad));
@@ -65,9 +63,13 @@ public class Menu {
         } catch (NumberFormatException e) {
             System.out.println(e);
             System.out.println("[!] la cantidad debe de ser diferente a cero (0)");
-        }catch (NullPointerException e){
-            System.out.println(e);
-            System.out.println("[!] El objeto no existe");
+        }catch (ProductoNoEncontradoException e){
+            System.out.println(e.getMessage());
         }
+    }
+
+    private String preguntar(String etiqueta){
+        System.out.println(" " + etiqueta + ": ");
+        return sc.nextLine().trim();
     }
 }

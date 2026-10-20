@@ -20,6 +20,10 @@ public class Pedido {
         return lineas;
     }
 
+    public boolean estaVacio(){
+        return lineas.isEmpty();
+    }
+
     public double getTotal(){
         double total = 0;
         for (LineaPedido l : lineas){

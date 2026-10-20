@@ -7,6 +7,16 @@ public class Producto {
     private double price;
 
     public Producto(String codigo, String name, int stock, double price){
+       if (codigo == null || codigo.isBlank()){
+           throw new DatoInvalidoException("[!] El código no puede estar vacio.");
+       }
+       if (stock <= 0){
+           throw new DatoInvalidoException("[!] El stock no puede ser 0 o negativo.");
+       }
+       if (price <= 0){
+           throw new DatoInvalidoException("[!] El precio no puede ser 0 o negativo.");
+       }
+
         this.codigo = codigo;
         this.name = name;
         this.stock = stock;
